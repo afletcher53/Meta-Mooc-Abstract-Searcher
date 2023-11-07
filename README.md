@@ -5,8 +5,5 @@
 
 
 To fill out later
+[@10.1093/jamia/ocac127]
 
-
-<div id="refs" class="references csl-bib-body hanging-indent">
-
-<div id="ref-10.1093/jamia/ocac127" class="csl-entry">
