@@ -47,24 +47,24 @@ parser.add_argument(
 )
 
 args = parser.parse_args()
-path = str(args.path)
-threshold = float(args.threshold)
+PATH = str(args.path)
+THRESHOLD = float(args.threshold)
 
-logging.info("PyLint Starting | Path: %s | Threshold: %s", path, threshold)
+logging.info("PyLint Starting | Path: %s | Threshold: %s", PATH, THRESHOLD)
 
 pylint_output = StringIO()  # Custom open stream
 reporter = TextReporter(pylint_output)
-results = Run([path], reporter=reporter, exit=False)
+results = Run([PATH], reporter=reporter, exit=False)
 
 
 final_score = results.linter.stats.global_note
 
-if float(final_score) < threshold:
-    message = f"PyLint Failed | Score: {final_score} | Threshold: {threshold}"
+if float(final_score) < THRESHOLD:
+    message = f"PyLint Failed | Score: {final_score} | Threshold: {THRESHOLD}"
     logging.error(message)
     print(pylint_output.getvalue())
     raise ValueError(message)
 else:
-    message = f"PyLint Passed | Score: {final_score} | Threshold: {threshold}"
+    message = f"PyLint Passed | Score: {final_score} | Threshold: {THRESHOLD}"
     logging.info(message)
     sys.exit(0)
