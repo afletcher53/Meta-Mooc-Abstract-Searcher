@@ -12,18 +12,33 @@ from pylint.reporters.text import TextReporter
 
 logging.getLogger().setLevel(logging.INFO)
 
-# Argument parsing
-parser = argparse.ArgumentParser()
-parser.add_argument("-p", "--path", default="./src", type=str)
-parser.add_argument("-t", "--threshold", default=7, type=float)
-args = parser.parse_args()
+parser = argparse.ArgumentParser(prog="LINT")
 
+parser.add_argument(
+    "-p",
+    "--path",
+    help="path to directory you want to run pylint | "
+    "Default: %(default)s | "
+    "Type: %(type)s ",
+    default="./src",
+    type=str,
+)
+
+parser.add_argument(
+    "-t",
+    "--threshold",
+    help="score threshold to fail pylint runner | "
+    "Default: %(default)s | "
+    "Type: %(type)s ",
+    default=7,
+    type=float,
+)
+
+args = parser.parse_args()
 PATH = str(args.path)
 THRESHOLD = float(args.threshold)
 
 logging.info("PyLint Starting | Path: %s | Threshold: %s", PATH, THRESHOLD)
-
-
 
 pylint_output = StringIO()  # Custom open stream
 reporter = TextReporter(pylint_output)
