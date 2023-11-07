@@ -23,6 +23,8 @@ THRESHOLD = float(args.threshold)
 
 logging.info("PyLint Starting | Path: %s | Threshold: %s", PATH, THRESHOLD)
 
+
+
 pylint_output = StringIO()  # Custom open stream
 reporter = TextReporter(pylint_output)
 results = Run([PATH], reporter=reporter, exit=False)
