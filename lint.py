@@ -59,7 +59,7 @@ results = Run([path], reporter=reporter, exit=False)
 
 final_score = results.linter.stats.global_note
 
-if final_score < threshold:
+if float(final_score) < threshold:
     message = f"PyLint Failed | Score: {final_score} | Threshold: {threshold}"
     logging.error(message)
     print(pylint_output.getvalue())
