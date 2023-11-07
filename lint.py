@@ -1,7 +1,26 @@
+"""
+This module provides a command-line interface to run PyLint on a given directory and 
+check the resulting score against a threshold.
+
+The module defines an argument parser that accepts two optional arguments:
+- `path`: the path to the directory to be linted (default: "./src")
+- `threshold`: the minimum score required to pass the linting (default: 7)
+
+The module uses PyLint's `Run` function to lint the specified directory and generate 
+a score report. If the final score is below the threshold, the module raises an exception 
+and prints the score report to the console. Otherwise, it exits with a success status code.
+
+Example usage:
+    $ python lint.py --path ./my_project --threshold 8.5
+"""
+
+
 import argparse
 import logging
+import sys
+from io import StringIO
 from pylint.lint import Run
-
+from pylint.reporters.text import TextReporter
 
 logging.getLogger().setLevel(logging.INFO)
 
@@ -31,31 +50,21 @@ args = parser.parse_args()
 path = str(args.path)
 threshold = float(args.threshold)
 
-logging.info(
-    "PyLint Starting | " "Path: {} | " "Threshold: {} ".format(path, threshold)
-)
+logging.info("PyLint Starting | Path: %s | Threshold: %s", path, threshold)
 
-results = Run([path])
+pylint_output = StringIO()  # Custom open stream
+reporter = TextReporter(pylint_output)
+results = Run([path], reporter=reporter, exit=False)
 
-final_score = results.linter.stats["global_note"]
+
+final_score = results.linter.stats.global_note
 
 if final_score < threshold:
-    message = (
-        "PyLint Failed | "
-        "Score: {} | "
-        "Threshold: {} ".format(final_score, threshold)
-    )
-
+    message = f"PyLint Failed | Score: {final_score} | Threshold: {threshold}"
     logging.error(message)
-    raise Exception(message)
-
+    print(pylint_output.getvalue())
+    raise ValueError(message)
 else:
-    message = (
-        "PyLint Passed | "
-        "Score: {} | "
-        "Threshold: {} ".format(final_score, threshold)
-    )
-
+    message = f"PyLint Passed | Score: {final_score} | Threshold: {threshold}"
     logging.info(message)
-
-    exit(0)
+    sys.exit(0)
