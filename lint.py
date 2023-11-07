@@ -1,19 +1,7 @@
 """
-This module provides a command-line interface to run PyLint on a given directory and 
-check the resulting score against a threshold.
-
-The module defines an argument parser that accepts two optional arguments:
-- `path`: the path to the directory to be linted (default: "./src")
-- `threshold`: the minimum score required to pass the linting (default: 7)
-
-The module uses PyLint's `Run` function to lint the specified directory and generate 
-a score report. If the final score is below the threshold, the module raises an exception 
-and prints the score report to the console. Otherwise, it exits with a success status code.
-
-Example usage:
-    $ python lint.py --path ./my_project --threshold 8.5
+Command-line interface to run PyLint on a given directory and check the score against a threshold.
+Usage: $ python lint.py --path ./my_project --threshold 8.5
 """
-
 
 import argparse
 import logging
@@ -24,29 +12,12 @@ from pylint.reporters.text import TextReporter
 
 logging.getLogger().setLevel(logging.INFO)
 
-parser = argparse.ArgumentParser(prog="LINT")
-
-parser.add_argument(
-    "-p",
-    "--path",
-    help="path to directory you want to run pylint | "
-    "Default: %(default)s | "
-    "Type: %(type)s ",
-    default="./src",
-    type=str,
-)
-
-parser.add_argument(
-    "-t",
-    "--threshold",
-    help="score threshold to fail pylint runner | "
-    "Default: %(default)s | "
-    "Type: %(type)s ",
-    default=7,
-    type=float,
-)
-
+# Argument parsing
+parser = argparse.ArgumentParser()
+parser.add_argument("-p", "--path", default="./src", type=str)
+parser.add_argument("-t", "--threshold", default=7, type=float)
 args = parser.parse_args()
+
 PATH = str(args.path)
 THRESHOLD = float(args.threshold)
 
