@@ -19,6 +19,8 @@ pylint_output = StringIO()
 results = Run([args.path], reporter=TextReporter(pylint_output), exit=False)
 
 if args.threshold > (score := float(results.linter.stats.global_note)):
-    print(f"PyLint Failed | Score: {score} | Threshold: {args.threshold}\n{float(results.linter.stats.global_note)}")
+    print(
+        f"PyLint Failed | Score: {score} | Threshold: {args.threshold}\n{float(results.linter.stats.global_note)}"
+    )
     raise ValueError("PyLint check failed")
 print(f"PyLint Passed | Score: {score} | Threshold: {args.threshold}")
