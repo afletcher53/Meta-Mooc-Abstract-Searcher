@@ -4,6 +4,7 @@ from collections import Counter
 import csv
 import wget
 from nltk.stem.snowball import SnowballStemmer
+from tqdm import tqdm
 
 STEM = True
 WRITE_RESULTS_TO_CSV = True
@@ -151,103 +152,104 @@ def search_over_full_bib(newlines):
         tuple: A tuple containing three lists: the hits, the full records that matched,
         and the URLs associated with the records.
     """
-    hits = []
-    bibs = []
-    urls = []
-    for l in newlines:
-        if STEM:
-            newl = stemmer.stem(l)
-        else:
-            newl = l.lower()
-        for j in search_term1:
-            if j.lower() in newl:
-                for k in search_term2:
-                    if k.lower() in newl:
-                        for o in search_term4:
-                            if o.lower() in newl:
-                                record = extract_record(l)
-                                if "title" not in record:
-                                    title = ""
-                                else:
-                                    title = record["title"]
-                                if "abstract" not in record:
-                                    abstract = ""
-                                else:
-                                    abstract = record["abstract"]
-                                hits.append([title, abstract, l, j, k, o])
-                                bibs.append(l)
-                                urls.append(record["url"])
-                                break
-                        break
-                break
+    hits, bibs, urls = [], [], []
+
+    for line in tqdm(newlines, desc="Processing Full BIBs"):
+        newl = stemmer.stem(line) if STEM else line.lower()
+        if any(j in newl for j in terms1) and \
+           any(k in newl for k in terms2) and \
+           any(o in newl for o in terms4):
+            record = extract_record(line)
+            title = record.get("title", "")
+            abstract = record.get("abstract", "")
+            url = record.get("url", "")
+            matching_terms = [term for term in terms1+terms2+terms4 if term in newl]
+            hits.append([title, abstract, line] + matching_terms)
+            bibs.append(line)
+            urls.append(url)
 
     print(f"Found {len(hits)} Records from Full Bib Search")
+
     return hits, bibs, urls
 
 
 def search_over_title(newlines):
-    hits = []
-    bibs = []
-    urls = []
-    for l in newlines:
-        if len(l) == 0:
+    hits, bibs, urls = [], [], []
+
+
+    for line in tqdm(newlines, desc="Processing titles"):
+        if not line:
             continue
-        record = extract_record(l)
-        if "title" not in record:
-            continue
-        title = record["title"]
+        
+        record = extract_record(line)
+        title = record.get("title", "").lower()
+
         if STEM:
             title = stemmer.stem(title)
-        for j in search_term1:
-            if j.lower() in title:
-                for k in search_term2:
-                    if k.lower() in title:
-                        for o in search_term4:
-                            if o.lower() in title:
-                                hits.append([title, j, k, o])
-                                bibs.append(l)
-                                urls.append(record["url"])
-                                break
-                        break
-                break
+
+        # Check if any search term from each category is found in the title
+        if any(j in title for j in terms1) and \
+           any(k in title for k in terms2) and \
+           any(o in title for o in terms4):
+
+            # Extract URL or set to empty string if not present
+            url = record.get("url", "")
+
+            # Create a list of matching terms for the current title
+            matching_terms = [term for term in terms1+terms2+terms4 if term in title]
+
+            hits.append([record["title"]] + matching_terms)  # original title for display
+            bibs.append(line)
+            urls.append(url)
 
     print(f"Found {len(hits)} Records from Title Search")
+
     return hits, bibs, urls
 
 
 def search_over_abstract(newlines):
-    hits = []
-    bibs = []
-    urls = []
-    for l in newlines:
-        if len(l) == 0:
+    """
+    Searches over abstracts in a list of newline-separated bibliographic records.
+    
+    Args:
+        newlines (list): A list of newline-separated strings representing bibliographic records.
+        STEM (bool, optional): A flag indicating whether to use stemming on abstracts. 
+        Defaults to True.
+
+    Returns:
+        tuple: A tuple of three lists: hits, full records, and URLs of matched abstracts.
+    """
+    hits, bibs, urls = [], [], []
+
+
+    for line in tqdm(newlines, desc="Processing abstracts"):
+        if not line:
             continue
-        record = extract_record(l)
-        if "abstract" not in record:
-            continue
-        abstract = record["abstract"]
+        record = extract_record(line)
+        abstract = record.get("abstract", "").lower()
+
         if STEM:
             abstract = stemmer.stem(abstract)
-        for j in search_term1:
-            if j.lower() in abstract:
-                for k in search_term2:
-                    if k.lower() in abstract:
-                        for o in search_term4:
-                            if o.lower() in abstract:
-                                if "title" in record:
-                                    title = record["title"]
-                                    hits.append([title, abstract, j, k, o])
-                                else:
-                                    hits.append(["", abstract, j, k, o])
-                                bibs.append(l)
-                                urls.append(record["url"])
-                                break
-                        break
-                break
+
+        # Check if any search term from each category is found in the abstract
+        if any(j in abstract for j in terms1) and \
+           any(k in abstract for k in terms2) and \
+           any(o in abstract for o in terms4):
+
+            title = record.get("title", "")
+            url = record.get("url", "")
+            matching_terms = [term for term in terms1+terms2+terms4 if term in abstract]
+            hits.append([title, record["abstract"]] + matching_terms)
+            bibs.append(line)
+            urls.append(url)
 
     print(f"Found {len(hits)} Records from Abstract Search")
     return hits, bibs, urls
 
+
+terms1 = [term.lower() for term in search_term1]
+terms2 = [term.lower() for term in search_term2]
+terms4 = [term.lower() for term in search_term4]
 
 fulltext_search, fulltext_bibs, fulltext_urls = search_over_full_bib(newlines)
 title_search, title_bibs, title_urls = search_over_title(newlines)
@@ -256,11 +258,6 @@ abstract_search, abstract_bibs, abstract_urls = search_over_abstract(newlines)
 full_terms1 = []
 full_terms2 = []
 full_terms4 = []
-
-"""
-Write searching results to csv file, make files based on fullbib/title/abstract searching 
-"""
-
 
 OUTPUT_TO_CSV_FULLBIB_SEARCH = (
     "./data/acl_bib_search_fullbib_stem" + str(STEM) + ".csv"
@@ -309,7 +306,7 @@ if WRITE_RESULTS_TO_CSV:
         wr = csv.writer(cout)
         wr.writerow(
             [
-                "Tintle",
+                "Title",
                 "Abstract",
                 "Matched Search Term 1",
                 "Matched Search Term 2",

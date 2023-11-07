@@ -1,11 +1,31 @@
 Term,Cnt
-annotat,168
-evalu,150
-challeng,75
-benchmark,37
-assess,7
-shared task,112
-track,2
-question-answ,4
-publicly available dataset,1
-communiti,1
+natural languag,162
+translat,9
+nlp,46
+infer,8
+relation extract,9
+semant,34
+annotat,40
+summar,11
+challeng,16
+evalu,55
+clinical text,17
+generat,15
+natural language process,46
+medical text,8
+discharge summar,3
+clinical not,10
+shared task,19
+entity recognit,18
+summaris,1
+information retriev,5
+sentiment,1
+clinical domain,1
+benchmark,6
+medical domain,2
+language process,5
+question-answ,2
+clinical narr,3
+clinical record,2
+medical record,2
+track,1

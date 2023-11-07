@@ -1,14 +1,22 @@
 Term,Cnt
-natural language process,232
-natural languag,31
-relation extract,11
-translat,37
-nlp,89
-generat,34
-semant,54
-entity recognit,21
-summar,5
-language process,28
-information retriev,6
+natural language process,160
+natural languag,27
+health record,54
+translat,32
+nlp,71
+generat,27
+clinical not,18
+semant,46
+medical domain,9
+medical text,28
+clinical record,2
+entity recognit,15
+summar,3
+language process,20
 infer,8
+clinical domain,6
+relation extract,9
+clinical text,15
+information retriev,4
+clinical narr,2
 sentiment,1
