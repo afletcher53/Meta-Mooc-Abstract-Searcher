@@ -1,0 +1,15 @@
+Title,Matched Search Term 1,Matched Search Term 2,Matched Search Term 4
+" ""method for designing semantic annotation of sepsis signs in clinical text"",",clinical text,semant,annotat
+" ""a survey of evaluation methods of generated medical textual reports"",",medical text,generat,evalu
+" ""overview of the problem list summarization ({p}rob{s}um) 2023 shared task on summarizing patients{'} active diagnoses and problems from electronic health record progress notes"",",electronic health record,summar,shared task
+" ""assessing the limits of straightforward models for nested named entity recognition in {s}panish clinical narratives"",",clinical narr,entity recognit,assess
+" ""cross-language transfer of high-quality annotations: combining neural machine translation with cross-linguistic span alignment to apply {ner} to clinical texts in a low-resource language"",",clinical text,translat,annotat
+" ""comparing encoder-only and encoder-decoder transformers for relation extraction from biomedical texts: an empirical study on ten benchmark datasets"",",medical text,relation extract,benchmark
+" ""overview of the {mediqa} 2021 shared task on summarization in the medical domain"",",medical domain,summar,shared task
+" ""alignment annotation for clinic visit dialogue to clinical note sentence language generation"",",clinical not,generat,annotat
+" ""neural dependency parsing of biomedical text: {t}urku{nlp} entry in the {craft} structural annotation task"",",medical text,nlp,annotat
+" ""investigating the challenges of temporal relation extraction from clinical text"",",clinical text,relation extract,challeng
+" ""building a semantically annotated corpus for congestive heart and renal failure from clinical records and the literature"",",clinical record,semant,annotat
+" ""esculape : un syst{\`e}me de question-r{\'e}ponse dans le domaine m{\'e}dical fond{\'e} sur l{'}extraction de relations [esculape: a question-answering system in the medical domain based on relation extraction]"",",medical domain,relation extract,question-answ
+" ""annotation and disambiguation of semantic types in biomedical text: a cascaded approach to named entity recognition"",",medical text,entity recognit,annotat
+" ""evaluation resources for concept-based cross-lingual information retrieval in the medical domain"",",medical domain,information retriev,evalu
