@@ -156,14 +156,18 @@ def search_over_full_bib(newlines):
 
     for line in tqdm(newlines, desc="Processing Full BIBs"):
         newl = stemmer.stem(line) if STEM else line.lower()
-        if any(j in newl for j in terms1) and \
-           any(k in newl for k in terms2) and \
-           any(o in newl for o in terms4):
+        if (
+            any(j in newl for j in terms1)
+            and any(k in newl for k in terms2)
+            and any(o in newl for o in terms4)
+        ):
             record = extract_record(line)
             title = record.get("title", "")
             abstract = record.get("abstract", "")
             url = record.get("url", "")
-            matching_terms = [term for term in terms1+terms2+terms4 if term in newl]
+            matching_terms = [
+                term for term in terms1 + terms2 + terms4 if term in newl
+            ]
             hits.append([title, abstract, line] + matching_terms)
             bibs.append(line)
             urls.append(url)
@@ -176,11 +180,10 @@ def search_over_full_bib(newlines):
 def search_over_title(newlines):
     hits, bibs, urls = [], [], []
 
-
     for line in tqdm(newlines, desc="Processing titles"):
         if not line:
             continue
-        
+
         record = extract_record(line)
         title = record.get("title", "").lower()
 
@@ -188,17 +191,22 @@ def search_over_title(newlines):
             title = stemmer.stem(title)
 
         # Check if any search term from each category is found in the title
-        if any(j in title for j in terms1) and \
-           any(k in title for k in terms2) and \
-           any(o in title for o in terms4):
-
+        if (
+            any(j in title for j in terms1)
+            and any(k in title for k in terms2)
+            and any(o in title for o in terms4)
+        ):
             # Extract URL or set to empty string if not present
             url = record.get("url", "")
 
             # Create a list of matching terms for the current title
-            matching_terms = [term for term in terms1+terms2+terms4 if term in title]
+            matching_terms = [
+                term for term in terms1 + terms2 + terms4 if term in title
+            ]
 
-            hits.append([record["title"]] + matching_terms)  # original title for display
+            hits.append(
+                [record["title"]] + matching_terms
+            )  # original title for display
             bibs.append(line)
             urls.append(url)
 
@@ -210,17 +218,16 @@ def search_over_title(newlines):
 def search_over_abstract(newlines):
     """
     Searches over abstracts in a list of newline-separated bibliographic records.
-    
+
     Args:
         newlines (list): A list of newline-separated strings representing bibliographic records.
-        STEM (bool, optional): A flag indicating whether to use stemming on abstracts. 
+        STEM (bool, optional): A flag indicating whether to use stemming on abstracts.
         Defaults to True.
 
     Returns:
         tuple: A tuple of three lists: hits, full records, and URLs of matched abstracts.
     """
     hits, bibs, urls = [], [], []
-
 
     for line in tqdm(newlines, desc="Processing abstracts"):
         if not line:
@@ -232,13 +239,16 @@ def search_over_abstract(newlines):
             abstract = stemmer.stem(abstract)
 
         # Check if any search term from each category is found in the abstract
-        if any(j in abstract for j in terms1) and \
-           any(k in abstract for k in terms2) and \
-           any(o in abstract for o in terms4):
-
+        if (
+            any(j in abstract for j in terms1)
+            and any(k in abstract for k in terms2)
+            and any(o in abstract for o in terms4)
+        ):
             title = record.get("title", "")
             url = record.get("url", "")
-            matching_terms = [term for term in terms1+terms2+terms4 if term in abstract]
+            matching_terms = [
+                term for term in terms1 + terms2 + terms4 if term in abstract
+            ]
             hits.append([title, record["abstract"]] + matching_terms)
             bibs.append(line)
             urls.append(url)
