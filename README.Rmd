@@ -1,9 +1,4 @@
 # Meta-Mooc-Abstract-Searcher
 
-
-### conda create --name meta-mooc --file requirements.txt
-
-
-To fill out later
 [@10.1093/jamia/ocac127]
 
